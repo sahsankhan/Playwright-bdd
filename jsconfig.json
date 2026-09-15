@@ -1,0 +1,11 @@
+{
+  "compilerOptions": {
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
+    "target": "ES2022",
+    "checkJs": false,
+    "strict": false,
+    "resolveJsonModule": true
+  },
+  "include": ["src/**/*.js", "src/**/*.d.ts", "cucumber.js"]
+}
