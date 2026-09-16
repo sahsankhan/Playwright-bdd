@@ -96,6 +96,10 @@ On macOS: `open reports/cucumber-report.html`. On Linux: `xdg-open reports/cucum
 | `@smoke` / `@catalog` | Home page lists products |
 | `@e2e` / `@checkout` | Register, sign in, cart, cash on delivery |
 
+## CI
+
+GitHub Actions runs `npm test` on push/PR and uploads `reports/` as the `cucumber-report` artifact.
+
 ## Layout
 
 ```

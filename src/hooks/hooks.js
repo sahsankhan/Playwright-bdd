@@ -1,5 +1,5 @@
 const { Before, After, BeforeAll, AfterAll, Status, setDefaultTimeout } = require('@cucumber/cucumber');
-const { chromium, firefox, webkit } = require('@playwright/test');
+const { chromium, firefox, webkit, devices } = require('@playwright/test');
 const { AuthPage } = require('../pageObjects/AuthPage');
 const { HomePage } = require('../pageObjects/HomePage');
 const { CheckoutPage } = require('../pageObjects/CheckoutPage');
@@ -18,7 +18,12 @@ BeforeAll(async function () {
 });
 
 Before(async function () {
-  this.context = await browser.newContext({ viewport: { width: 1280, height: 720 } });
+  const chrome = devices['Desktop Chrome'];
+  this.context = await browser.newContext({
+    ...(config.browser === 'firefox' || config.browser === 'webkit' ? {} : chrome),
+    viewport: { width: 1280, height: 720 },
+    deviceScaleFactor: 1,
+  });
   this.page = await this.context.newPage();
   this.authPage = new AuthPage(this.page, config.uiBaseUrl);
   this.homePage = new HomePage(this.page, config.uiBaseUrl);

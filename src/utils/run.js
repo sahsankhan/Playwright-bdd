@@ -22,7 +22,7 @@ if (fs.existsSync(jsonReport)) {
 }
 
 const cucumberHtml = path.resolve('reports', 'cucumber-report.html');
-if (fs.existsSync(cucumberHtml)) {
+if (!process.env.CI && fs.existsSync(cucumberHtml)) {
   if (process.platform === 'win32') {
     spawnSync('cmd', ['/c', 'start', '', cucumberHtml], { stdio: 'ignore' });
   } else if (process.platform === 'darwin') {
