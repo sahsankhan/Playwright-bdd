@@ -98,7 +98,9 @@ On macOS: `open reports/cucumber-report.html`. On Linux: `xdg-open reports/cucum
 
 ## CI
 
-GitHub Actions runs `npm test` on push/PR and uploads `reports/` as the `cucumber-report` artifact.
+GitHub Actions starts the Toolshop application inside the job with Docker Compose, runs `npm test` against `http://localhost:4200`, and uploads `reports/` as the `cucumber-report` artifact.
+
+The public site is not used in CI: Cloudflare serves a managed challenge to GitHub datacenter IPs, which breaks multi-step UI flows (for example login after register).
 
 ## Layout
 
