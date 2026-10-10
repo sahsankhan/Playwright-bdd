@@ -1,3 +1,7 @@
+const { expect } = require('@playwright/test');
+const config = require('../config');
+const { fetchInStockProduct } = require('../support/catalog');
+
 /** @param {import('@playwright/test').Page} page @param {string} uiBaseUrl */
 class HomePage {
   constructor(page, uiBaseUrl) {
@@ -14,15 +18,25 @@ class HomePage {
     await card.waitFor({ state: 'visible' });
   }
 
-  async addFirstProductToCart() {
+  async search(productName) {
     await this.open();
-    const nameLocator = this.page.locator('[data-test="product-name"]').first();
-    await nameLocator.waitFor({ state: 'visible' });
-    const productName = (await nameLocator.innerText()).trim();
-    await nameLocator.click();
-    await this.page.locator('[data-test="add-to-cart"]').click();
+    await this.page.locator('[data-test="search-query"]').fill(productName);
+    await this.page.locator('[data-test="search-submit"]').click();
+  }
+
+  async expectListed(productName) {
+    await expect(this.page.locator('[data-test="search-term"]')).toContainText(productName);
+    await expect(this.page.locator('[data-test="product-name"]').filter({ hasText: productName }).first()).toBeVisible();
+  }
+
+  async addFirstProductToCart() {
+    const product = await fetchInStockProduct(config.apiBaseUrl);
+    await this.page.goto(`${this.uiBaseUrl}/product/${product.id}`);
+    const add = this.page.locator('[data-test="add-to-cart"]');
+    await expect(add).toBeEnabled();
+    await add.click();
     await this.page.locator('[data-test="nav-cart"]').click();
-    return productName;
+    return product.name;
   }
 }
 

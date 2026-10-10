@@ -44,6 +44,22 @@ class AuthPage {
     await this.page.locator('[data-test="login-submit"]').click();
     await expect(this.page.locator('[data-test="nav-menu"]')).toBeVisible();
   }
+
+  async expectLoginPage() {
+    await expect(this.page).toHaveURL(/login/i);
+  }
+
+  async expectAccountMenu() {
+    await expect(this.page.locator('[data-test="nav-menu"]')).toBeVisible();
+  }
+
+  async rejectBadLogin() {
+    await this.page.goto(`${this.uiBaseUrl}/auth/login`);
+    await this.page.locator('[data-test="email"]').fill(`nobody.${Date.now()}@example.com`);
+    await this.page.locator('[data-test="password"]').fill('WrongPassword!9');
+    await this.page.locator('[data-test="login-submit"]').click();
+    await expect(this.page.locator('[data-test="login-error"]')).toBeVisible();
+  }
 }
 
 module.exports = { AuthPage };

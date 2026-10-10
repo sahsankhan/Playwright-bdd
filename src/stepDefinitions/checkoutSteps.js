@@ -27,3 +27,21 @@ When('they complete checkout with cash on delivery', async function () {
 Then('the order is confirmed', async function () {
   await this.checkoutPage.expectOrderConfirmed();
 });
+
+Then('the login page is shown', async function () {
+  await this.authPage.expectLoginPage();
+});
+
+Then('the account menu is visible', async function () {
+  await this.authPage.expectAccountMenu();
+});
+
+When('the customer signs in with a wrong password', async function () {
+  await this.authPage.rejectBadLogin();
+});
+
+Then('the login is rejected', async function () {
+  const { expect } = require('@playwright/test');
+  await expect(this.page.locator('[data-test="login-error"]')).toBeVisible();
+  await expect(this.page.locator('[data-test="nav-menu"]')).toHaveCount(0);
+});
